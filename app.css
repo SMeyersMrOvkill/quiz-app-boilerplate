@@ -6,3 +6,72 @@
   * https://github.com/andreacardybailey/responsive_example/blob/master/styles/responsive-base.css 
   *
 */
+
+/* class for everything in body */
+
+.body {
+  display: flex;
+  flex-direction: column;
+  margin:0;
+  justify-content: center;
+  justify-items: center;
+  align-content: center;
+  font-family: Helvetica, arial, sans-serif;
+  background-image: url("./i-spy-books-backround.jpg");
+  background-size: cover;
+  
+}
+
+/* class for everything in header */
+
+.header{
+margin:auto;
+background-color: black;
+color: white;
+padding: 20px;
+padding-left: 200px;
+padding-right: 200px;
+}
+
+
+/* class for everything in main */
+
+.main{
+  margin: auto;
+  padding: 50px;
+
+}
+
+/* class for everything on cards */
+
+.card{
+  border-width: 10px;
+  border-color: black;
+  justify-content: center;
+  justify-items: center;
+  align-content: center;
+  background-color: blanchedalmond;
+}
+
+#questionForm{
+  display: flex;
+  flex-direction: column;
+}
+
+
+/*class to style radio buttons*/
+
+form input[type="radio"] + label{
+  padding:5px;
+  color:rgb(107, 19, 19);
+}
+
+
+
+
+/* for mobile first approach */
+
+@media all and (min-width:800px) {
+
+
+} 
