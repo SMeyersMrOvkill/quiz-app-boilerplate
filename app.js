@@ -22,7 +22,7 @@ const store = {
         '4',
         '5'
       ],
-      correctAnswer: '5'
+      correctAnswer: '4'
     },
     {
       question: 'What is the current year?',
@@ -69,6 +69,8 @@ const store = {
   quizStarted: false,
   questionNumber: 0,
   score: 0,
+  failedToAnswer: false,
+  message: ""
 };
 
 /**
@@ -106,12 +108,20 @@ function templateEndPage() {
 }
 
 function templateQuestion() {
-  let template = `<div class="card">
-<h2>${store.questions[store.questionNumber].question}</h2><form id="questionform">`;
+  let template = `<div class="card">`;
+  if(store.failedToAnswer) {
+    store.failedToAnswer = false;
+    template += "<strong>Please select an answer.</strong></br>";
+  }
+  if(store.message !== "") {
+    template += "<strong>" + store.message + "</strong></br>";
+    gotItRight = "";
+  }
+  template += `<h2>${store.questions[store.questionNumber].question}</h2><form id="questionform">`;
   for(let i = 0; i < store.questions[store.questionNumber].answers.length; i++) {
     let answer = store.questions[store.questionNumber].answers[i];
-    template += `<input type="radio" name="question${store.questionNumber}" value="${answer}">
-<label for="question${store.questionNumber}">${answer}</label>`
+    template += `<div class="form-group"><input type="radio" name="question${store.questionNumber}" value="${answer}">
+<label for="question${store.questionNumber}">${answer}</label></div>`
   }
   template += `<button id="answer">Submit Answer</button></form>`
   return template;
@@ -151,6 +161,19 @@ function handleRestartQuiz(evt) {
 
 function handleAnswerQuestion(evt) {
   evt.preventDefault();
+  let answer = $('input[name=question' + store.questionNumber + ']:checked').val();
+  if(answer == undefined || answer == null) {
+    store.failedToAnswer = true;
+    render();
+    return;
+  }
+  console.log("You chose",answer);
+  if(answer == store.questions[store.questionNumber].correctAnswer) {
+    store.message = "That's right! '" + answer + "' is the correct answer!";
+    store.score += 1;
+  } else {
+    store.message = "Nope! '" + store.questions[store.questionNumber].correctAnswer + "' was the correct answer!";
+  }
   store.questionNumber += 1;
   render();
 }
