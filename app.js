@@ -101,8 +101,20 @@ function templateEndPage() {
   return `<div class="card">
 <h2>Congratulations!</h2>
 <p>You have finished the quiz. You scored ${store.score} points out of ${store.questions.length}</p>
-<strong>Your score: ${((store.score/store.questions.length) * 100).toFixed(3)}</strong><br />
+<strong>Your score: ${((store.score/store.questions.length) * 100).toFixed(3)}</strong>
 <button id="restart">Play again?</button>`;
+}
+
+function templateQuestion() {
+  let template = `<div class="card">
+<h2>${store.questions[store.questionNumber].question}</h2><form id="questionform">`;
+  for(let i = 0; i < store.questions[store.questionNumber].answers.length; i++) {
+    let answer = store.questions[store.questionNumber].answers[i];
+    template += `<input type="radio" name="question${store.questionNumber}" value="${answer}">
+<label for="question${store.questionNumber}">${answer}</label>`
+  }
+  template += `<button id="answer">Submit Answer</button></form>`
+  return template;
 }
 
 /********** RENDER FUNCTION(S) **********/
@@ -115,7 +127,7 @@ function render() {
   } else if (store.questionNumber == store.questions.length) { 
     $('main').html(templateEndPage());
   } else {
-    $('main').html("");
+    $('main').html(templateQuestion());
   }
 }
 
@@ -137,8 +149,15 @@ function handleRestartQuiz(evt) {
   render();
 }
 
+function handleAnswerQuestion(evt) {
+  evt.preventDefault();
+  store.questionNumber += 1;
+  render();
+}
+
 $(() => {
   render();
   $('main').on('click', '#start', handleStartQuiz);
   $('main').on('click', '#restart', handleRestartQuiz);
+  $('main').on('click', '#answer', handleAnswerQuestion);
 });
