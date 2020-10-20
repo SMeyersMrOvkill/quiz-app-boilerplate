@@ -5,24 +5,64 @@ const store = {
   // 5 or more questions are required
   questions: [
     {
-      question: 'What color is Darth Vader\'s lightsaber?',
+      question: 'What colour was Darth Vader\'s lightsaber?',
       answers: [
-        'red',
-        'orange',
-        'pink',
-        'green'
+        'blue',
+        'green',
+        'purple',
+        'red'
       ],
       correctAnswer: 'red'
     },
     {
+      question: 'How many Shrek movies exist?',
+      answers: [
+        '2',
+        '3',
+        '4',
+        '5'
+      ],
+      correctAnswer: '5'
+    },
+    {
       question: 'What is the current year?',
       answers: [
-        '1970',
-        '2015',
+        '1969',
+        '2000',
         '2020',
-        '2005'
+        '20'
       ],
       correctAnswer: '2020'
+    },
+    {
+      question: 'What was Emperor Palpatine\'s first name?',
+      answers: [
+        'Frank',
+        'Drallo',
+        'Shiv',
+        'Doofenshmirtz'
+      ],
+      correctAnswer: 'Shiv'
+    },
+    {
+      question: 'Who voices Shrek\'s truest companion in the Shrek series?',
+      answers: [
+        'Daniel Breaker',
+        'Kevin Hart',
+        'Eddie Murphy',
+        'Chris Rock'
+      ],
+      correctAnswer: 'Eddie Murphy'
+    },
+    {
+      question: 'Who is the current president of the United States?',
+      answers: [
+        'Barack Obama',
+        'Donald Trump',
+        'George H.W. Bush',
+        'Abraham Lincoln'
+      ],
+      correctAnswer: 'Donald Trump'
     }
     
   ],
