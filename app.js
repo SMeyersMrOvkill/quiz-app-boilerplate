@@ -178,11 +178,18 @@ function templateEndPage() {
 }
 
 /**
+ * Generates the template for the current score.
+ */
+function templateCurrentScore() {
+  return `<strong>Question ${STORE.questionNumber} of ${STORE.questions.length} - ${getScore()}%`;
+}
+
+/**
  * Generates the template for a message.
  */
 function templateMessage() {
   return `<div class="card">
-  <strong>Question ${STORE.questionNumber} of ${STORE.questions.length} - ${getScore()}%
+  ${templateCurrentScore()}
   <h2>${STORE.message}</h2>
   <button id="close">Close</button>`;
 }
@@ -204,7 +211,7 @@ function templateAnswer(answer) {
  */
 function templateQuestion() {
   let template = `<div class="card">
-  <strong>Question ${STORE.questionNumber} of ${STORE.questions.length} - ${getScore()}%
+  ${templateCurrentScore()}
   <h2>${getCurrentQuestion()}</h2>
   <form id="questionform">`;
   for(let i = 0; i < STORE.questions[STORE.questionNumber].answers.length; i++) {
