@@ -1,7 +1,7 @@
 /**
  * Example store structure
  */
-const store = {
+const STORE = {
   // 5 or more questions are required
   questions: [
     {
@@ -78,39 +78,39 @@ const store = {
  * Starts the quiz
  */
 function startQuiz() {
-  store.quizStarted = true;
-  store.questionNumber = 0;
-  store.score = 0;
+  STORE.quizStarted = true;
+  STORE.questionNumber = 0;
+  STORE.score = 0;
 }
 
 /**
  * Restarts the quiz
  */
 function restartQuiz() {
-  store.quizStarted = false;
-  store.questionNumber = 0;
-  store.score = 0;
+  STORE.quizStarted = false;
+  STORE.questionNumber = 0;
+  STORE.score = 0;
 }
 
 /**
  * Prettiness function for getting the current question.
  */
 function getCurrentQuestion() {
-  return store.questions[store.questionNumber].question;
+  return STORE.questions[STORE.questionNumber].question;
 }
 
 /**
  * Prettiness function for getting the currently selected answer.
  */
 function getSelectedAnswer() {
-  return $('input[name=question' + store.questionNumber + ']:checked').val();
+  return $('input[name=question' + STORE.questionNumber + ']:checked').val();
 }
 
 /**
  * Prettiness function for getting the correct answer to the current question.
  */
 function getCorrectAnswer() {
-  return store.questions[store.questionNumber].correctAnswer;
+  return STORE.questions[STORE.questionNumber].correctAnswer;
 }
 
 /**
@@ -120,21 +120,21 @@ function getCorrectAnswer() {
 function scoreQuestion() {
   let answer = getSelectedAnswer();
   if(answer == undefined || answer == null) {
-    store.message = "Please answer the question";
+    STORE.message = "Please answer the question";
     render();
     return;
   }
   if(answer == getCorrectAnswer()) {
-    store.message = "That's right! '" + answer + "' is the correct answer!";
-    store.score += 1;
+    STORE.message = "That's right! '" + answer + "' is the correct answer!";
+    STORE.score += 1;
   } else {
-    store.message = "Nope! '" + getCorrectAnswer() + "' was the correct answer!";
+    STORE.message = "Nope! '" + getCorrectAnswer() + "' was the correct answer!";
   }
-  store.questionNumber += 1;
+  STORE.questionNumber += 1;
 }
 
 function getScore() {
-  return ((store.score/store.questions.length) * 100).toFixed(2);
+  return ((STORE.score/STORE.questions.length) * 100).toFixed(2);
 }
 
 /**
@@ -172,8 +172,8 @@ function templateStartPage() {
 function templateEndPage() {
   return `<div class="card">
   <h2>Congratulations!</h2>
-  <p>You have finished the quiz. You scored ${store.score} points out of ${store.questions.length}</p>
-  <strong>Your score: ${getScore()}</strong>
+  <p>You have finished the quiz. You scored ${STORE.score} points out of ${STORE.questions.length}</p>
+  <strong>Your score: ${getScore()}%</strong>
   <button id="restart">Play again?</button>`;
 }
 
@@ -182,7 +182,7 @@ function templateEndPage() {
  */
 function templateMessage() {
   return `<div class="card">
-  <h2>${store.message}</h2>
+  <h2>${STORE.message}</h2>
   <button id="close">Close</button>`;
 }
 
@@ -192,8 +192,8 @@ function templateMessage() {
  */
 function templateAnswer(answer) {
   return `<div class="form-group">
-  <input type="radio" name="question${store.questionNumber}" value="${answer}">
-  <label for="question${store.questionNumber}">${answer}</label>
+  <input type="radio" name="question${STORE.questionNumber}" value="${answer}">
+  <label for="question${STORE.questionNumber}">${answer}</label>
   </div>`;
 }
 
@@ -203,11 +203,11 @@ function templateAnswer(answer) {
  */
 function templateQuestion() {
   let template = `<div class="card">
-  <strong>Question ${store.questionNumber} of ${store.questions.length} - ${getScore()}%
+  <strong>Question ${STORE.questionNumber} of ${STORE.questions.length} - ${getScore()}%
   <h2>${getCurrentQuestion()}</h2>
   <form id="questionform">`;
-  for(let i = 0; i < store.questions[store.questionNumber].answers.length; i++) {
-    let answer = store.questions[store.questionNumber].answers[i];
+  for(let i = 0; i < STORE.questions[STORE.questionNumber].answers.length; i++) {
+    let answer = STORE.questions[STORE.questionNumber].answers[i];
     template += templateAnswer(answer);
   }
   template += `<button id="answer">Submit Answer</button></form>`;
@@ -220,12 +220,12 @@ function templateQuestion() {
  * This function conditionally replaces the contents of the <main> tag based on the state of the store
  */
 function render() {
-  if(store.message != "") {
-    console.log("Showing message", store.message);
+  if(STORE.message != "") {
+    console.log("Showing message", STORE.message);
     $('main').html(templateMessage());
-  } else if(!store.quizStarted) {
+  } else if(!STORE.quizStarted) {
     $('main').html(templateStartPage());
-  } else if (store.questionNumber == store.questions.length) { 
+  } else if (STORE.questionNumber == STORE.questions.length) { 
     $('main').html(templateEndPage());
   } else {
     $('main').html(templateQuestion());
@@ -276,7 +276,7 @@ function handleAnswerQuestion(evt) {
  * @param {Event} evt 
  */
 function handleCloseMessage(evt) {
-  store.message = "";
+  STORE.message = "";
   render();
 }
 
