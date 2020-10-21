@@ -133,6 +133,10 @@ function scoreQuestion() {
   store.questionNumber += 1;
 }
 
+function getScore() {
+  return ((store.score/store.questions.length) * 100).toFixed(2);
+}
+
 /**
  * 
  * Technical requirements:
@@ -169,7 +173,7 @@ function templateEndPage() {
   return `<div class="card">
   <h2>Congratulations!</h2>
   <p>You have finished the quiz. You scored ${store.score} points out of ${store.questions.length}</p>
-  <strong>Your score: ${((store.score/store.questions.length) * 100).toFixed(3)}</strong>
+  <strong>Your score: ${getScore()}</strong>
   <button id="restart">Play again?</button>`;
 }
 
@@ -199,6 +203,7 @@ function templateAnswer(answer) {
  */
 function templateQuestion() {
   let template = `<div class="card">
+  <strong>Question ${store.questionNumber} of ${store.questions.length} - ${getScore()}%
   <h2>${getCurrentQuestion()}</h2>
   <form id="questionform">`;
   for(let i = 0; i < store.questions[store.questionNumber].answers.length; i++) {
