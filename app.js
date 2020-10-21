@@ -73,6 +73,28 @@ const store = {
   message: ""
 };
 
+/********** DATA MANIPULATION FUNCTIONS **********/
+
+function startQuiz() {
+  store.quizStarted = true;
+  store.questionNumber = 0;
+  store.score = 0;
+}
+
+function restartQuiz() {
+  store.quizStarted = false;
+  store.questionNumber = 0;
+  store.score = 0;
+}
+
+function getSelectedAnswer() {
+  return $('input[name=question' + store.questionNumber + ']:checked').val();
+}
+
+function getCorrectAnswer() {
+  return store.questions[store.questionNumber].correctAnswer;
+}
+
 /**
  * 
  * Technical requirements:
@@ -94,17 +116,17 @@ const store = {
 
 function templateStartPage() {
   return `<div class="card">
-<h2>Welcome to the random topic quiz!</h2>
-<p>This quiz will test your mastery of random topics.</p>
-<button id="start">Start</button>`;
+  <h2>Welcome to the random topic quiz!</h2>
+  <p>This quiz will test your mastery of random topics.</p>
+  <button id="start">Start</button>`;
 }
 
 function templateEndPage() {
   return `<div class="card">
-<h2>Congratulations!</h2>
-<p>You have finished the quiz. You scored ${store.score} points out of ${store.questions.length}</p>
-<strong>Your score: ${((store.score/store.questions.length) * 100).toFixed(3)}</strong>
-<button id="restart">Play again?</button>`;
+  <h2>Congratulations!</h2>
+  <p>You have finished the quiz. You scored ${store.score} points out of ${store.questions.length}</p>
+  <strong>Your score: ${((store.score/store.questions.length) * 100).toFixed(3)}</strong>
+  <button id="restart">Play again?</button>`;
 }
 
 function templateQuestion() {
@@ -121,9 +143,9 @@ function templateQuestion() {
   for(let i = 0; i < store.questions[store.questionNumber].answers.length; i++) {
     let answer = store.questions[store.questionNumber].answers[i];
     template += `<div class="form-group"><input type="radio" name="question${store.questionNumber}" value="${answer}">
-<label for="question${store.questionNumber}">${answer}</label></div>`
+    <label for="question${store.questionNumber}">${answer}</label></div>`
   }
-  template += `<button id="answer">Submit Answer</button></form>`
+  template += `<button id="answer">Submit Answer</button></form>`;
   return template;
 }
 
@@ -146,33 +168,28 @@ function render() {
 // These functions handle events (submit, click, etc)
 
 function handleStartQuiz(evt) {
-  store.quizStarted = true;
-  store.questionNumber = 0;
-  store.score = 0;
+  startQuiz();
   render();
 }
 
 function handleRestartQuiz(evt) {
-  store.quizStarted = false;
-  store.questionNumber = 0;
-  store.score = 0;
+  restartQuiz();
   render();
 }
 
 function handleAnswerQuestion(evt) {
   evt.preventDefault();
-  let answer = $('input[name=question' + store.questionNumber + ']:checked').val();
+  let answer = getSelectedAnswer();
   if(answer == undefined || answer == null) {
     store.failedToAnswer = true;
     render();
     return;
   }
-  console.log("You chose",answer);
-  if(answer == store.questions[store.questionNumber].correctAnswer) {
+  if(answer == getCorrectAnswer()) {
     store.message = "That's right! '" + answer + "' is the correct answer!";
     store.score += 1;
   } else {
-    store.message = "Nope! '" + store.questions[store.questionNumber].correctAnswer + "' was the correct answer!";
+    store.message = "Nope! '" + getCorrectAnswer() + "' was the correct answer!";
   }
   store.questionNumber += 1;
   render();
