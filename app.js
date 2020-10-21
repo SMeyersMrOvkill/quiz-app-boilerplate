@@ -87,6 +87,10 @@ function restartQuiz() {
   store.score = 0;
 }
 
+function getCurrentQuestion() {
+  return store.questions[store.questionNumber].question;
+}
+
 function getSelectedAnswer() {
   return $('input[name=question' + store.questionNumber + ']:checked').val();
 }
@@ -98,7 +102,7 @@ function getCorrectAnswer() {
 function scoreQuestion() {
   let answer = getSelectedAnswer();
   if(answer == undefined || answer == null) {
-    store.failedToAnswer = true;
+    store.message = "Please answer the question";
     render();
     return;
   }
@@ -151,17 +155,28 @@ function templateMessage() {
   <button id="close">Close</button>`;
 }
 
+/**
+ * Generates the partial template for an individual answer within a question.
+ * @param {string} answer 
+ */
+function templateAnswer(answer) {
+  return `<div class="form-group">
+  <input type="radio" name="question${store.questionNumber}" value="${answer}">
+  <label for="question${store.questionNumber}">${answer}</label>
+  </div>`;
+}
+
+/**
+ * Generates the template for the question dialog.
+ * @see templateAnswer
+ */
 function templateQuestion() {
-  let template = `<div class="card">`;
-  if(store.failedToAnswer) {
-    store.failedToAnswer = false;
-    template += "<strong>Please select an answer.</strong></br>";
-  }
-  template += `<h2>${store.questions[store.questionNumber].question}</h2><form id="questionform">`;
+  let template = `<div class="card">
+  <h2>${getCurrentQuestion()}</h2>
+  <form id="questionform">`;
   for(let i = 0; i < store.questions[store.questionNumber].answers.length; i++) {
     let answer = store.questions[store.questionNumber].answers[i];
-    template += `<div class="form-group"><input type="radio" name="question${store.questionNumber}" value="${answer}">
-    <label for="question${store.questionNumber}">${answer}</label></div>`
+    template += templateAnswer(answer);
   }
   template += `<button id="answer">Submit Answer</button></form>`;
   return template;
@@ -169,8 +184,9 @@ function templateQuestion() {
 
 /********** RENDER FUNCTION(S) **********/
 
-// This function conditionally replaces the contents of the <main> tag based on the state of the store
-
+/**
+ * This function conditionally replaces the contents of the <main> tag based on the state of the store
+ */
 function render() {
   if(store.message != "") {
     console.log("Showing message", store.message);
@@ -188,27 +204,53 @@ function render() {
 
 // These functions handle events (submit, click, etc)
 
+/**
+ * Start the quiz from the beginning
+ * @see startQuiz
+ * @see render
+ * @param {Event} evt 
+ */
 function handleStartQuiz(evt) {
   startQuiz();
   render();
 }
 
+/**
+ * Restart the quiz when we're at the end.
+ * @see restartQuiz
+ * @see render
+ * @param {Event} evt 
+ */
 function handleRestartQuiz(evt) {
   restartQuiz();
   render();
 }
 
+/**
+ * Answer a question.
+ * @see scoreQuestion
+ * @see render
+ * @param {Event} evt 
+ */
 function handleAnswerQuestion(evt) {
   evt.preventDefault();
   scoreQuestion();
   render();
 }
 
+/**
+ * Close a message dialog.
+ * @see render
+ * @param {Event} evt 
+ */
 function handleCloseMessage(evt) {
   store.message = "";
   render();
 }
 
+/**
+ * Tie in all event handling functions
+ */
 $(() => {
   render();
   $('main').on('click', '#start', handleStartQuiz);
