@@ -69,36 +69,54 @@ const store = {
   quizStarted: false,
   questionNumber: 0,
   score: 0,
-  failedToAnswer: false,
   message: ""
 };
 
 /********** DATA MANIPULATION FUNCTIONS **********/
 
+/**
+ * Starts the quiz
+ */
 function startQuiz() {
   store.quizStarted = true;
   store.questionNumber = 0;
   store.score = 0;
 }
 
+/**
+ * Restarts the quiz
+ */
 function restartQuiz() {
   store.quizStarted = false;
   store.questionNumber = 0;
   store.score = 0;
 }
 
+/**
+ * Prettiness function for getting the current question.
+ */
 function getCurrentQuestion() {
   return store.questions[store.questionNumber].question;
 }
 
+/**
+ * Prettiness function for getting the currently selected answer.
+ */
 function getSelectedAnswer() {
   return $('input[name=question' + store.questionNumber + ']:checked').val();
 }
 
+/**
+ * Prettiness function for getting the correct answer to the current question.
+ */
 function getCorrectAnswer() {
   return store.questions[store.questionNumber].correctAnswer;
 }
 
+/**
+ * Calculates the score of a question.
+ * Moves the page accordingly.
+ */
 function scoreQuestion() {
   let answer = getSelectedAnswer();
   if(answer == undefined || answer == null) {
@@ -134,6 +152,9 @@ function scoreQuestion() {
 
 // These functions return HTML templates
 
+/**
+ * Generates the template for the start of a quiz.
+ */
 function templateStartPage() {
   return `<div class="card">
   <h2>Welcome to the random topic quiz!</h2>
@@ -141,6 +162,9 @@ function templateStartPage() {
   <button id="start">Start</button>`;
 }
 
+/**
+ * Generates the template for the end of a quiz.
+ */
 function templateEndPage() {
   return `<div class="card">
   <h2>Congratulations!</h2>
@@ -149,6 +173,9 @@ function templateEndPage() {
   <button id="restart">Play again?</button>`;
 }
 
+/**
+ * Generates the template for a message.
+ */
 function templateMessage() {
   return `<div class="card">
   <h2>${store.message}</h2>
