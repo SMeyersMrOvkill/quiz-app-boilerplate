@@ -182,6 +182,7 @@ function templateEndPage() {
  */
 function templateMessage() {
   return `<div class="card">
+  <strong>Question ${STORE.questionNumber} of ${STORE.questions.length} - ${getScore()}%
   <h2>${STORE.message}</h2>
   <button id="close">Close</button>`;
 }
