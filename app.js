@@ -95,6 +95,22 @@ function getCorrectAnswer() {
   return store.questions[store.questionNumber].correctAnswer;
 }
 
+function scoreQuestion() {
+  let answer = getSelectedAnswer();
+  if(answer == undefined || answer == null) {
+    store.failedToAnswer = true;
+    render();
+    return;
+  }
+  if(answer == getCorrectAnswer()) {
+    store.message = "That's right! '" + answer + "' is the correct answer!";
+    store.score += 1;
+  } else {
+    store.message = "Nope! '" + getCorrectAnswer() + "' was the correct answer!";
+  }
+  store.questionNumber += 1;
+}
+
 /**
  * 
  * Technical requirements:
@@ -129,15 +145,17 @@ function templateEndPage() {
   <button id="restart">Play again?</button>`;
 }
 
+function templateMessage() {
+  return `<div class="card">
+  <h2>${store.message}</h2>
+  <button id="close">Close</button>`;
+}
+
 function templateQuestion() {
   let template = `<div class="card">`;
   if(store.failedToAnswer) {
     store.failedToAnswer = false;
     template += "<strong>Please select an answer.</strong></br>";
-  }
-  if(store.message !== "") {
-    template += "<strong>" + store.message + "</strong></br>";
-    gotItRight = "";
   }
   template += `<h2>${store.questions[store.questionNumber].question}</h2><form id="questionform">`;
   for(let i = 0; i < store.questions[store.questionNumber].answers.length; i++) {
@@ -154,7 +172,10 @@ function templateQuestion() {
 // This function conditionally replaces the contents of the <main> tag based on the state of the store
 
 function render() {
-  if(!store.quizStarted) {
+  if(store.message != "") {
+    console.log("Showing message", store.message);
+    $('main').html(templateMessage());
+  } else if(!store.quizStarted) {
     $('main').html(templateStartPage());
   } else if (store.questionNumber == store.questions.length) { 
     $('main').html(templateEndPage());
@@ -179,19 +200,12 @@ function handleRestartQuiz(evt) {
 
 function handleAnswerQuestion(evt) {
   evt.preventDefault();
-  let answer = getSelectedAnswer();
-  if(answer == undefined || answer == null) {
-    store.failedToAnswer = true;
-    render();
-    return;
-  }
-  if(answer == getCorrectAnswer()) {
-    store.message = "That's right! '" + answer + "' is the correct answer!";
-    store.score += 1;
-  } else {
-    store.message = "Nope! '" + getCorrectAnswer() + "' was the correct answer!";
-  }
-  store.questionNumber += 1;
+  scoreQuestion();
+  render();
+}
+
+function handleCloseMessage(evt) {
+  store.message = "";
   render();
 }
 
@@ -200,4 +214,5 @@ $(() => {
   $('main').on('click', '#start', handleStartQuiz);
   $('main').on('click', '#restart', handleRestartQuiz);
   $('main').on('click', '#answer', handleAnswerQuestion);
+  $('main').on('click', '#close', handleCloseMessage);
 });
