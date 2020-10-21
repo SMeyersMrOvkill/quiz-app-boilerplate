@@ -57,7 +57,7 @@ padding-right: 200px;
   border-radius: 30px;
 }
 
-
+/*this is the parent class for the radio buttons and labels*/
 
 #questionForm{
   display: flex;
@@ -78,9 +78,6 @@ button {
   color: rgb(255, 255, 162);
   background-color: black;
 }
-
-
-
 
 /* for mobile first approach */
 
